@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Schedule &amp; Optimizer - Academic Ops</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/timetable.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+        <div>
+          <div class="brand-title">Academic Ops</div>
+          <div class="brand-subtitle">Institution Portal</div>
+        </div>
+      </div>
+
+      <div class="sidebar-profile">
+        <div class="profile-avatar">A</div>
+        <div class="profile-info">
+          <div class="profile-name">Administrator</div>
+          <div class="profile-role">System Ops</div>
+        </div>
+      </div>
+
+      <nav>
+        <div class="nav-category">Main Workspace</div>
+        <a href="/admin/dashboard.html">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Overview &amp; Analytics
+        </a>
+        <a href="/admin/timetable.html" class="active">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Master Timetable &amp; Optimizer
+        </a>
+
+        <div class="nav-category">Academic Records</div>
+        <a href="/admin/students.html">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Students Directory
+        </a>
+        <a href="/admin/faculty.html">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Faculty &amp; Staff
+        </a>
+        <a href="/admin/subjects.html">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          Courses &amp; Subjects
+        </a>
+        <a href="/admin/resources.html">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+          Classrooms &amp; Laboratories
+        </a>
+        <a href="/admin/assignments.html">
+          <svg viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>
+          Course Allocations
+        </a>
+
+        <div class="sidebar-footer">
+          <a href="#" onclick="Auth.logout()" class="logout-btn">
+            <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Sign Out
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="header-bar">
+        <div class="header-title-group">
+          <h1>Master Timetable</h1>
+          <p>Conflict-free academic distribution with staggered start times and lunch break.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn" id="reOptimizeBtn" onclick="triggerOptimization()">
+            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span id="reOptimizeLabel">Re-Optimize Schedule</span>
+          </button>
+          <button class="btn btn-secondary" onclick="window.print()">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print / Export
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Multi-Criteria Filters -->
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon-inside">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="timetableSearch" class="search-input" placeholder="Search subject, faculty, or room..." oninput="onFilterChange()">
+        </div>
+
+        <div class="filter-group">
+          <select id="filterSection" class="filter-select" onchange="onFilterChange()">
+            <option value="">All Divisions</option>
+          </select>
+
+          <select id="filterFaculty" class="filter-select" onchange="onFilterChange()">
+            <option value="">All Faculty</option>
+          </select>
+
+          <select id="filterRoom" class="filter-select" onchange="onFilterChange()">
+            <option value="">All Classrooms &amp; Labs</option>
+          </select>
+
+          <select id="filterType" class="filter-select" onchange="onFilterChange()">
+            <option value="">All Types</option>
+            <option value="Lecture">Lectures Only</option>
+            <option value="Lab">Laboratories Only</option>
+          </select>
+
+          <button class="btn-sm btn-secondary" onclick="resetTimetableFilters()">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Timetable Matrix Container -->
+      <div id="master-timetable-container">
+        <div class="status-card" style="text-align: center; padding: 40px; color: var(--text-muted);">
+          <p>Loading master schedule grid...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/timetable.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      Auth.requireRole("ADMIN");
+      initMasterTimetable();
+    });
+
+    async function triggerOptimization() {
+      const btn = document.getElementById("reOptimizeBtn");
+      const label = document.getElementById("reOptimizeLabel");
+      btn.disabled = true;
+      label.textContent = "Optimizing Timetable...";
+      Toast.show("Running scheduling engine...", "info");
+
+      try {
+        const res = await api.post("/api/timetable/generate", {});
+        btn.disabled = false;
+        label.textContent = "Re-Optimize Schedule";
+
+        if (res.success) {
+          Toast.show(`Schedule re-optimized! ${res.total_assigned} sessions allocated conflict-free.`, "success");
+          initMasterTimetable();
+        } else {
+          Toast.show("Optimization failed: " + (res.message || "Unknown error"), "error");
+        }
+      } catch (err) {
+        btn.disabled = false;
+        label.textContent = "Re-Optimize Schedule";
+        Toast.show("Error connecting to backend scheduling engine.", "error");
+      }
+    }
+
+    function resetTimetableFilters() {
+      document.getElementById("timetableSearch").value = "";
+      document.getElementById("filterSection").value = "";
+      document.getElementById("filterFaculty").value = "";
+      document.getElementById("filterRoom").value = "";
+      document.getElementById("filterType").value = "";
+      onFilterChange();
+    }
+  </script>
+</body>
+</html>

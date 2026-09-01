@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Directory - Academic Ops</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+        <div>
+          <div class="brand-title">Academic Ops</div>
+          <div class="brand-subtitle">Institution Portal</div>
+        </div>
+      </div>
+
+      <div class="sidebar-profile">
+        <div class="profile-avatar">A</div>
+        <div class="profile-info">
+          <div class="profile-name">Administrator</div>
+          <div class="profile-role">System Ops</div>
+        </div>
+      </div>
+
+      <nav>
+        <div class="nav-category">Main Workspace</div>
+        <a href="/admin/dashboard.html">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Overview &amp; Analytics
+        </a>
+        <a href="/admin/timetable.html">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Master Timetable &amp; Optimizer
+        </a>
+
+        <div class="nav-category">Academic Records</div>
+        <a href="/admin/students.html" class="active">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Students Directory
+        </a>
+        <a href="/admin/faculty.html">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Faculty &amp; Staff
+        </a>
+        <a href="/admin/subjects.html">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          Courses &amp; Subjects
+        </a>
+        <a href="/admin/resources.html">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+          Classrooms &amp; Laboratories
+        </a>
+        <a href="/admin/assignments.html">
+          <svg viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>
+          Course Allocations
+        </a>
+
+        <div class="sidebar-footer">
+          <a href="#" onclick="Auth.logout()" class="logout-btn">
+            <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Sign Out
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="header-bar">
+        <div class="header-title-group">
+          <h1>Student Directory</h1>
+          <p>Institutional student records, numeric roll codes, and academic year assignments.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn" onclick="openAddStudentModal()">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Student
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon-inside">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="studentSearch" class="search-input" placeholder="Search by name, roll number, or email..." oninput="filterStudents()">
+        </div>
+        <div class="filter-group">
+          <select id="studentDeptFilter" class="filter-select" onchange="filterStudents()">
+            <option value="">All Departments</option>
+            <option value="1">Computer Science (CSE)</option>
+            <option value="2">Electronics &amp; Comm (ECE)</option>
+            <option value="3">Mechanical Engg (ME)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <div class="table-header-bar">
+          <div class="table-header-title">Enrolled Students</div>
+          <span class="table-count-badge" id="studentTableCount">0 Students</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Roll Number</th>
+              <th>Full Name</th>
+              <th>Email Address</th>
+              <th>Department</th>
+              <th>Year</th>
+              <th>Division</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="student-table-body">
+            <tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-muted);">Loading records...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Student Add / Edit Modal -->
+  <div id="studentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="studentModalTitle">Add Student Record</h3>
+        <button class="modal-close" onclick="closeModal('studentModal')">&times;</button>
+      </div>
+      <form onsubmit="saveStudent(event)">
+        <div class="modal-body">
+          <input type="hidden" id="studentId">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentName">Full Name</label>
+              <input type="text" id="studentName" required placeholder="e.g. Riddhee Kulkarni">
+            </div>
+            <div class="form-group">
+              <label for="studentCode">Roll Number</label>
+              <input type="text" id="studentCode" required placeholder="e.g. 1012411011">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentEmail">Email Address</label>
+              <input type="email" id="studentEmail" required placeholder="e.g. riddheekulkarni@gmail.com">
+            </div>
+            <div class="form-group">
+              <label for="studentPassword">Password</label>
+              <input type="password" id="studentPassword" placeholder="Default: password123">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="studentDept">Department</label>
+            <select id="studentDept" required></select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentYear">Year</label>
+              <select id="studentYear" required>
+                <option value="1">FY</option>
+                <option value="2">SY</option>
+                <option value="3" selected>TY</option>
+                <option value="4">BTech</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="studentSection">Division</label>
+              <select id="studentSection"></select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('studentModal')">Cancel</button>
+          <button type="submit" class="btn">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
