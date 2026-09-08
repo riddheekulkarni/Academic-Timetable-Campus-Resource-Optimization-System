@@ -400,6 +400,106 @@
   border-color: var(--color-primary);
 }
 
+.print-only {
+  display: none;
+}
+
+.rollcall-no,
+.rollcall-signature {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  .sidebar,
+  .toolbar,
+  .header-actions,
+  .action-buttons,
+  .data-table th:last-child,
+  .data-table td:last-child {
+    display: none !important;
+  }
+
+  .dashboard-container,
+  .main-content {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .header-bar {
+    margin: 0 0 8px !important;
+  }
+
+  .header-title-group h1 {
+    font-size: 18px !important;
+  }
+
+  .header-title-group p {
+    font-size: 10px !important;
+  }
+
+  .table-container {
+    box-shadow: none !important;
+    border: 1px solid #94a3b8 !important;
+  }
+
+  .table-header-bar {
+    padding: 7px 9px !important;
+  }
+
+  .data-table {
+    font-size: 10px !important;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 6px 7px !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  .data-table tr {
+    break-inside: avoid;
+  }
+
+  .student-directory-page .data-table th:nth-child(4),
+  .student-directory-page .data-table td:nth-child(4),
+  .student-directory-page .data-table th:nth-child(5),
+  .student-directory-page .data-table td:nth-child(5) {
+    display: none;
+  }
+
+  .student-directory-page .rollcall-no,
+  .student-directory-page .rollcall-signature {
+    display: table-cell !important;
+  }
+
+  .student-directory-page .rollcall-signature {
+    width: 24%;
+    min-width: 115px;
+  }
+
+  .student-directory-page .badge {
+    border: none !important;
+    background: transparent !important;
+    color: #111827 !important;
+    padding: 0 !important;
+  }
+
+  .print-only {
+    display: block !important;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+}
+
 /* Custom Tabs Component */
 .tab-nav {
   display: flex;

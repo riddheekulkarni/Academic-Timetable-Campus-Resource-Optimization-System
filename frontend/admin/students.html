@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
 </head>
-<body>
+<body class="student-directory-page">
   <div class="dashboard-container">
     <aside class="sidebar">
       <div class="sidebar-brand">
@@ -77,6 +77,7 @@
           <p>Institutional student records, numeric roll codes, and academic year assignments.</p>
         </div>
         <div class="header-actions">
+          <button class="btn btn-secondary" onclick="printStudentRollCall()">Print Roll Call</button>
           <button class="btn" onclick="openAddStudentModal()">
             <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Add Student
@@ -92,16 +93,24 @@
           <input type="text" id="studentSearch" class="search-input" placeholder="Search by name, roll number, or email..." oninput="filterStudents()">
         </div>
         <div class="filter-group">
-          <select id="studentDeptFilter" class="filter-select" onchange="filterStudents()">
-            <option value="">All Departments</option>
-            <option value="1">Computer Science (CSE)</option>
-            <option value="2">Electronics &amp; Comm (ECE)</option>
-            <option value="3">Mechanical Engg (ME)</option>
+          <select id="studentDeptFilter" class="filter-select" onchange="updateStudentDivisionFilter(); filterStudents()">
+            <option value="">All Branches</option>
+          </select>
+          <select id="studentYearFilter" class="filter-select" onchange="updateStudentDivisionFilter(); filterStudents()">
+            <option value="">All Classes</option>
+            <option value="1">FY</option>
+            <option value="2">SY</option>
+            <option value="3">TY</option>
+            <option value="4">BTech</option>
+          </select>
+          <select id="studentSectionFilter" class="filter-select" onchange="filterStudents()">
+            <option value="">All Divisions</option>
           </select>
         </div>
       </div>
 
       <div class="table-container">
+        <div id="studentPrintTitle" class="print-only"></div>
         <div class="table-header-bar">
           <div class="table-header-title">Enrolled Students</div>
           <span class="table-count-badge" id="studentTableCount">0 Students</span>
@@ -109,17 +118,19 @@
         <table class="data-table">
           <thead>
             <tr>
+              <th class="rollcall-no">#</th>
               <th>Roll Number</th>
               <th>Full Name</th>
               <th>Email Address</th>
               <th>Department</th>
               <th>Year</th>
               <th>Division</th>
+              <th class="rollcall-signature">Signature / Present</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="student-table-body">
-            <tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-muted);">Loading records...</td></tr>
+            <tr><td colspan="9" style="text-align:center; padding:24px; color:var(--text-muted);">Loading records...</td></tr>
           </tbody>
         </table>
       </div>

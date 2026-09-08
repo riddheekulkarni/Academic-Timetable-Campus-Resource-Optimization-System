@@ -94,6 +94,7 @@ async function loadStudents() {
 
   if (res.success) {
     allStudents = res.students || [];
+    populateStudentFilters();
     renderStudentsTable(allStudents);
   }
 }
@@ -111,15 +112,17 @@ function renderStudentsTable(students) {
     return;
   }
 
-  students.forEach(s => {
+  students.forEach((s, index) => {
     tbody.innerHTML += `
       <tr>
+        <td class="rollcall-no">${index + 1}</td>
         <td><strong>${s.student_code}</strong></td>
         <td>${s.name}</td>
         <td><span style="color:#64748b;">${s.email}</span></td>
         <td>${s.dept_name}</td>
         <td><span class="badge badge-neutral" style="white-space: nowrap;">${formatYear(s.academic_year)}</span></td>
         <td><span class="badge badge-ok" style="white-space: nowrap;">${s.section_name || 'Unassigned'}</span></td>
+        <td class="rollcall-signature"></td>
         <td>
           <div class="action-buttons">
             <button class="btn-sm btn-edit" onclick="openEditStudentModal(${s.student_id})">Edit</button>
@@ -134,15 +137,54 @@ function renderStudentsTable(students) {
 function filterStudents() {
   const query = (document.getElementById("studentSearch").value || "").toLowerCase();
   const dept = document.getElementById("studentDeptFilter") ? document.getElementById("studentDeptFilter").value : "";
+  const year = document.getElementById("studentYearFilter") ? document.getElementById("studentYearFilter").value : "";
+  const section = document.getElementById("studentSectionFilter") ? document.getElementById("studentSectionFilter").value : "";
 
   const filtered = allStudents.filter(s => {
     const matchesQuery = s.name.toLowerCase().includes(query) || 
                          s.student_code.toLowerCase().includes(query) || 
                          s.email.toLowerCase().includes(query);
     const matchesDept = !dept || s.dept_id == dept;
-    return matchesQuery && matchesDept;
-  });
+    const matchesYear = !year || s.academic_year == year;
+    const matchesSection = !section || s.section_id == section;
+    return matchesQuery && matchesDept && matchesYear && matchesSection;
+  }).sort((a, b) => a.student_code.localeCompare(b.student_code));
   renderStudentsTable(filtered);
+}
+
+function populateStudentFilters() {
+  const deptSelect = document.getElementById("studentDeptFilter");
+  if (deptSelect) {
+    const selected = deptSelect.value;
+    deptSelect.innerHTML = `<option value="">All Branches</option>` +
+      departmentsList.map(d => `<option value="${d.dept_id}">${d.dept_code} — ${d.dept_name}</option>`).join("");
+    deptSelect.value = selected;
+  }
+  updateStudentDivisionFilter();
+}
+
+function updateStudentDivisionFilter() {
+  const divisionSelect = document.getElementById("studentSectionFilter");
+  if (!divisionSelect) return;
+  const dept = document.getElementById("studentDeptFilter")?.value;
+  const year = document.getElementById("studentYearFilter")?.value;
+  const selected = divisionSelect.value;
+  const divisions = sectionsList.filter(section =>
+    (!dept || section.dept_id == dept) && (!year || section.academic_year == year)
+  );
+  divisionSelect.innerHTML = `<option value="">All Divisions</option>` +
+    divisions.map(section => `<option value="${section.section_id}">${section.section_name}</option>`).join("");
+  if (divisions.some(section => String(section.section_id) === selected)) divisionSelect.value = selected;
+}
+
+function printStudentRollCall() {
+  filterStudents();
+  const branch = document.getElementById("studentDeptFilter")?.selectedOptions[0]?.text || "All Branches";
+  const year = document.getElementById("studentYearFilter")?.selectedOptions[0]?.text || "All Classes";
+  const division = document.getElementById("studentSectionFilter")?.selectedOptions[0]?.text || "All Divisions";
+  const title = document.getElementById("studentPrintTitle");
+  if (title) title.textContent = `Roll Call List — ${branch} | ${year} | ${division}`;
+  window.print();
 }
 
 function populateStudentDropdowns() {
@@ -290,6 +332,11 @@ function filterFaculty() {
     return matchesQuery && matchesDept;
   });
   renderFacultyTable(filtered);
+}
+
+function printFacultyDirectory() {
+  filterFaculty();
+  window.print();
 }
 
 function populateFacultyDropdowns() {
