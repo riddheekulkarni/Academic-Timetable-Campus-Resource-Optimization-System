@@ -172,7 +172,45 @@ function renderFilteredTimetableGrid(containerId, schedule) {
 
   html += `</tbody></table></div>`;
   container.innerHTML = html;
+
+  fitFacultyTimetableToViewport(container);
 }
+
+/**
+ * Fits the faculty's full weekly matrix inside the current browser viewport.
+ * Scaling the completed grid retains the card borders, colours, and layout;
+ * it avoids rewriting cells into a less useful condensed view.
+ */
+function fitFacultyTimetableToViewport(container) {
+  if (!document.body.classList.contains("faculty-schedule-page")) return;
+
+  const wrapper = container.querySelector(".timetable-grid-wrapper");
+  if (!wrapper) return;
+
+  requestAnimationFrame(() => {
+    wrapper.classList.remove("is-viewport-fitted");
+    wrapper.style.removeProperty("transform");
+    wrapper.style.removeProperty("width");
+    wrapper.style.removeProperty("height");
+
+    const availableHeight = window.innerHeight - wrapper.getBoundingClientRect().top - 14;
+    const naturalHeight = wrapper.scrollHeight;
+    const scale = Math.min(1, availableHeight / naturalHeight);
+
+    if (scale < 0.995) {
+      wrapper.classList.add("is-viewport-fitted");
+      wrapper.style.transformOrigin = "top left";
+      wrapper.style.transform = `scale(${scale})`;
+      wrapper.style.width = `${100 / scale}%`;
+      wrapper.style.height = `${naturalHeight * scale}px`;
+    }
+  });
+}
+
+window.addEventListener("resize", () => {
+  const container = document.getElementById("faculty-timetable-container");
+  if (container) fitFacultyTimetableToViewport(container);
+});
 
 /**
  * Role Specific Timetable (Student / Faculty)

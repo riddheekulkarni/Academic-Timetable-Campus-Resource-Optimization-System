@@ -1,208 +1,51 @@
--- ============================================================================
--- Academic Timetable & Campus Resource Optimization System
--- Phase 2: Seed Data (seed.sql)
--- Default Password for all seeded users: password123
--- ============================================================================
-
+-- Demonstration dataset. Default password for every account: Password123
 USE academic_scheduler;
-
--- Disable foreign key checks during batch seed
 SET FOREIGN_KEY_CHECKS = 0;
-
-TRUNCATE TABLE schedule_changes;
-TRUNCATE TABLE room_allocations;
-TRUNCATE TABLE timetable;
-TRUNCATE TABLE course_assignments;
-TRUNCATE TABLE subject_requirements;
-TRUNCATE TABLE faculty_availability;
-TRUNCATE TABLE time_slots;
-TRUNCATE TABLE equipment;
-TRUNCATE TABLE labs;
-TRUNCATE TABLE rooms;
-TRUNCATE TABLE subjects;
-TRUNCATE TABLE students;
-TRUNCATE TABLE sections;
-TRUNCATE TABLE faculty;
-TRUNCATE TABLE departments;
-TRUNCATE TABLE users;
-
+TRUNCATE TABLE schedule_changes; TRUNCATE TABLE room_allocations; TRUNCATE TABLE timetable;
+TRUNCATE TABLE course_assignments; TRUNCATE TABLE subject_requirements; TRUNCATE TABLE faculty_availability;
+TRUNCATE TABLE time_slots; TRUNCATE TABLE equipment; TRUNCATE TABLE labs; TRUNCATE TABLE rooms;
+TRUNCATE TABLE subjects; TRUNCATE TABLE students; TRUNCATE TABLE sections; TRUNCATE TABLE faculty;
+TRUNCATE TABLE departments; TRUNCATE TABLE users;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- ----------------------------------------------------------------------------
--- 1. Departments
--- ----------------------------------------------------------------------------
-INSERT INTO departments (dept_id, dept_code, dept_name) VALUES
-(1, 'CSE', 'Computer Science & Engineering'),
-(2, 'ECE', 'Electronics & Communication Engineering'),
-(3, 'MECH', 'Mechanical Engineering');
+INSERT INTO departments (dept_code, dept_name) VALUES
+('CSE','Computer Science & Engineering'),('ECE','Electronics & Communication Engineering'),('MECH','Mechanical Engineering');
 
--- ----------------------------------------------------------------------------
--- 2. Users (Password for all: password123)
--- Hash generated via Werkzeug security generating 'password123'
--- ----------------------------------------------------------------------------
-INSERT INTO users (user_id, email, password_hash, role) VALUES
--- Admin
-(1, 'admin@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'ADMIN'),
+SET @pw = 'scrypt:32768:8:1$ub4zXILQG9FPG9aJ$4aa96097dabe57ab39c87b7d40422e02eeaf7341326d7ff16f42a4e584607205637b452929cc755cf872c9af2224f514c253627c75512613a20549c19ecb5039';
+INSERT INTO users (email,password_hash,role) VALUES
+('admin@gmail.com',@pw,'ADMIN'),
+('ananya.sharma@campus.edu',@pw,'FACULTY'),('rohit.patel@campus.edu',@pw,'FACULTY'),('kavita.iyer@campus.edu',@pw,'FACULTY'),('sandeep.verma@campus.edu',@pw,'FACULTY'),('meera.nair@campus.edu',@pw,'FACULTY'),('arjun.reddy@campus.edu',@pw,'FACULTY'),('pooja.kulkarni@campus.edu',@pw,'FACULTY'),('vikram.singh@campus.edu',@pw,'FACULTY'),('neha.gupta@campus.edu',@pw,'FACULTY'),('priyanka.das@campus.edu',@pw,'FACULTY'),('rakesh.joshi@campus.edu',@pw,'FACULTY'),('sneha.menon@campus.edu',@pw,'FACULTY'),('aditya.chavan@campus.edu',@pw,'FACULTY'),('deepa.bansal@campus.edu',@pw,'FACULTY'),('manish.yadav@campus.edu',@pw,'FACULTY'),
+('aarya.mehta@student.edu',@pw,'STUDENT'),('vivaan.shah@student.edu',@pw,'STUDENT'),('ishita.rao@student.edu',@pw,'STUDENT'),('krish.malhotra@student.edu',@pw,'STUDENT'),('diya.kapoor@student.edu',@pw,'STUDENT'),('aarav.naik@student.edu',@pw,'STUDENT'),('anika.sen@student.edu',@pw,'STUDENT'),('dhruv.jain@student.edu',@pw,'STUDENT'),('kavya.pillai@student.edu',@pw,'STUDENT'),('reyansh.mishra@student.edu',@pw,'STUDENT'),('saanvi.desai@student.edu',@pw,'STUDENT'),('advait.kulkarni@student.edu',@pw,'STUDENT'),('nisha.menon@student.edu',@pw,'STUDENT'),('arjun.sethi@student.edu',@pw,'STUDENT'),('tanvi.bose@student.edu',@pw,'STUDENT'),('yash.dubey@student.edu',@pw,'STUDENT'),('riya.chopra@student.edu',@pw,'STUDENT'),('kabir.saxena@student.edu',@pw,'STUDENT'),('shreya.nambiar@student.edu',@pw,'STUDENT'),('atharv.pawar@student.edu',@pw,'STUDENT'),('mira.shetty@student.edu',@pw,'STUDENT'),('pranav.goyal@student.edu',@pw,'STUDENT'),('isha.agrawal@student.edu',@pw,'STUDENT'),('omkar.patil@student.edu',@pw,'STUDENT'),('aadhya.rana@student.edu',@pw,'STUDENT');
 
--- Faculty Users
-(2, 'dr.smith@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
-(3, 'prof.johnson@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
-(4, 'dr.williams@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
-(5, 'prof.brown@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
-(6, 'dr.jones@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
-(7, 'prof.miller@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
-(8, 'dr.davis@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
-(9, 'prof.garcia@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'FACULTY'),
+INSERT INTO faculty (user_id,faculty_code,name,dept_id,designation) VALUES
+(2,'CSE101','Dr. Ananya Sharma',1,'Professor'),(3,'CSE102','Prof. Rohit Patel',1,'Associate Professor'),(4,'CSE103','Dr. Kavita Iyer',1,'Assistant Professor'),(5,'CSE104','Prof. Sandeep Verma',1,'Associate Professor'),(6,'CSE105','Dr. Meera Nair',1,'Assistant Professor'),(7,'CSE106','Prof. Arjun Reddy',1,'Professor'),
+(8,'ECE101','Dr. Pooja Kulkarni',2,'Professor'),(9,'ECE102','Prof. Vikram Singh',2,'Associate Professor'),(10,'ECE103','Dr. Neha Gupta',2,'Assistant Professor'),(11,'ECE104','Prof. Priyanka Das',2,'Associate Professor'),(12,'ECE105','Dr. Rakesh Joshi',2,'Assistant Professor'),
+(13,'ME101','Dr. Sneha Menon',3,'Professor'),(14,'ME102','Prof. Aditya Chavan',3,'Associate Professor'),(15,'ME103','Dr. Deepa Bansal',3,'Assistant Professor'),(16,'ME104','Prof. Manish Yadav',3,'Assistant Professor');
 
--- Student Users
-(10, 'alice@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'STUDENT'),
-(11, 'bob@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'STUDENT'),
-(12, 'charlie@gmail.com', 'scrypt:32768:8:1$bh96xmkhp4tyVlD8$0e947a0d36d0e6cc1ad03c1542481dd35326d15b712bd206959842d57c219d37d7f74885fc544e3860e8974fccf23d9934fc3d69f001a0852346813c4355a6a4', 'STUDENT');
+INSERT INTO sections (section_name,dept_id,academic_year,semester,student_count) VALUES
+('CSE-3A',1,3,5,4),('CSE-3B',1,3,5,4),('CSE-2A',1,2,3,4),('ECE-2A',2,2,3,4),('ECE-3A',2,3,5,3),('MECH-4A',3,4,7,3),('MECH-3A',3,3,5,3);
+INSERT INTO students (user_id,student_code,name,dept_id,academic_year,section_id) VALUES
+(17,'CSE23001','Aarya Mehta',1,3,1),(18,'CSE23002','Vivaan Shah',1,3,1),(19,'CSE23003','Ishita Rao',1,3,1),(20,'CSE23004','Krish Malhotra',1,3,1),(21,'CSE23005','Diya Kapoor',1,3,2),(22,'CSE23006','Aarav Naik',1,3,2),(23,'CSE23007','Anika Sen',1,3,2),(24,'CSE23008','Dhruv Jain',1,3,2),(25,'CSE24001','Kavya Pillai',1,2,3),(26,'CSE24002','Reyansh Mishra',1,2,3),(27,'CSE24003','Saanvi Desai',1,2,3),(28,'CSE24004','Advait Kulkarni',1,2,3),
+(29,'ECE24001','Nisha Menon',2,2,4),(30,'ECE24002','Arjun Sethi',2,2,4),(31,'ECE24003','Tanvi Bose',2,2,4),(32,'ECE24004','Yash Dubey',2,2,4),(33,'ECE23001','Riya Chopra',2,3,5),(34,'ECE23002','Kabir Saxena',2,3,5),(35,'ECE23003','Shreya Nambiar',2,3,5),(36,'ME22001','Atharv Pawar',3,4,6),(37,'ME22002','Mira Shetty',3,4,6),(38,'ME22003','Pranav Goyal',3,4,6),(39,'ME23001','Isha Agrawal',3,3,7),(40,'ME23002','Omkar Patil',3,3,7),(41,'ME23003','Aadhya Rana',3,3,7);
 
--- ----------------------------------------------------------------------------
--- 3. Faculty
--- ----------------------------------------------------------------------------
-INSERT INTO faculty (faculty_id, user_id, faculty_code, name, dept_id, designation) VALUES
-(1, 2, 'FAC101', 'Dr. Alan Smith', 1, 'Professor'),
-(2, 3, 'FAC102', 'Prof. Sarah Johnson', 1, 'Associate Professor'),
-(3, 4, 'FAC103', 'Dr. Robert Williams', 1, 'Assistant Professor'),
-(4, 5, 'FAC104', 'Prof. Emily Brown', 2, 'Professor'),
-(5, 6, 'FAC105', 'Dr. Michael Jones', 2, 'Associate Professor'),
-(6, 7, 'FAC106', 'Prof. David Miller', 3, 'Professor'),
-(7, 8, 'FAC107', 'Dr. Jessica Davis', 3, 'Assistant Professor'),
-(8, 9, 'FAC108', 'Prof. Carlos Garcia', 1, 'Assistant Professor');
+INSERT INTO subjects (subject_code,subject_name,dept_id,type,lectures_per_week,duration_hours,required_room_type) VALUES
+('CS501','Database Management Systems',1,'Lecture',3,1,'Classroom'),('CS501L','DBMS Laboratory',1,'Lab',1,2,'Computer Lab'),('CS502','Computer Networks',1,'Lecture',3,1,'Classroom'),('CS503','Operating Systems',1,'Lecture',3,1,'Classroom'),('CS503L','Operating Systems Laboratory',1,'Lab',1,2,'Computer Lab'),('CS504','Artificial Intelligence',1,'Lecture',3,1,'Classroom'),('CS401','Data Structures',1,'Lecture',3,1,'Classroom'),('CS401L','Data Structures Laboratory',1,'Lab',1,2,'Computer Lab'),
+('EC301','Digital Signal Processing',2,'Lecture',3,1,'Classroom'),('EC301L','DSP Laboratory',2,'Lab',1,2,'Computer Lab'),('EC302','Microprocessors and Controllers',2,'Lecture',3,1,'Classroom'),('EC303','Embedded Systems',2,'Lecture',3,1,'Classroom'),('EC303L','Embedded Systems Laboratory',2,'Lab',1,2,'Computer Lab'),('EC304','Communication Systems',2,'Lecture',3,1,'Classroom'),
+('ME701','Thermodynamics',3,'Lecture',3,1,'Classroom'),('ME701L','CAD and CAM Laboratory',3,'Lab',1,2,'Computer Lab'),('ME702','Machine Design',3,'Lecture',3,1,'Classroom'),('ME703','Robotics and Automation',3,'Lecture',3,1,'Classroom'),('ME703L','Robotics Laboratory',3,'Lab',1,2,'Computer Lab'),('ME704L','Manufacturing Processes Laboratory',3,'Lab',1,2,'Computer Lab');
+INSERT INTO subject_requirements (subject_id,min_capacity,requires_projector,requires_smart_board,min_computers) SELECT subject_id,4,TRUE,CASE WHEN subject_code IN ('CS504','EC303','ME703') THEN TRUE ELSE FALSE END,CASE WHEN type='Lab' THEN 4 ELSE 0 END FROM subjects;
 
--- ----------------------------------------------------------------------------
--- 4. Sections / Batches
--- ----------------------------------------------------------------------------
-INSERT INTO sections (section_id, section_name, dept_id, academic_year, semester, student_count) VALUES
-(1, 'CSE-3A', 1, 3, 5, 55),
-(2, 'CSE-3B', 1, 3, 5, 50),
-(3, 'ECE-2A', 2, 2, 3, 45),
-(4, 'MECH-4A', 3, 4, 7, 40);
+INSERT INTO rooms (room_number,building,capacity,projector_available,smart_board_available,is_active) VALUES
+('CR-101','Main Academic Block',60,TRUE,TRUE,TRUE),('CR-102','Main Academic Block',60,TRUE,FALSE,TRUE),('CR-103','Main Academic Block',50,TRUE,TRUE,TRUE),('CR-104','Main Academic Block',45,TRUE,FALSE,TRUE),('CR-105','Main Academic Block',40,FALSE,FALSE,TRUE),('CR-201','Science Block',70,TRUE,TRUE,TRUE),('CR-202','Science Block',60,TRUE,FALSE,TRUE),('CR-203','Science Block',50,TRUE,TRUE,TRUE),('CR-204','Science Block',45,TRUE,FALSE,TRUE),('CR-301','Engineering Block',80,TRUE,TRUE,TRUE),('CR-302','Engineering Block',55,TRUE,FALSE,TRUE),('CR-303','Engineering Block',40,TRUE,TRUE,TRUE);
+INSERT INTO labs (lab_name,building,capacity,computer_count,projector_available,specialized_equipment,is_active) VALUES
+('Database and OS Lab','Tech Block',40,40,TRUE,'MySQL and Linux workstations',TRUE),('AI and Networks Lab','Tech Block',40,40,TRUE,'GPU workstations and Cisco routers',TRUE),('Programming Lab','Tech Block',35,35,TRUE,'Python, Java and C++ tools',TRUE),('Electronics Lab','Science Block',30,30,TRUE,'Oscilloscopes and microcontroller kits',TRUE),('CAD CAM Lab','Engineering Block',35,35,TRUE,'AutoCAD, ANSYS and CNC simulator',TRUE),('Robotics Lab','Engineering Block',30,30,TRUE,'Arduino, PLC and robotic arm kits',TRUE);
+INSERT INTO equipment (equipment_name,quantity,location_lab_id,status) VALUES ('Cisco Router Rack',2,2,'Functional'),('GPU Workstation',12,2,'Functional'),('Digital Oscilloscope',15,4,'Functional'),('Robotic Arm Training Kit',6,6,'Functional'),('CNC Simulator Station',8,5,'Functional');
 
--- ----------------------------------------------------------------------------
--- 5. Students (Numeric Roll Numbers: 1012411001, 1012411002, etc.)
--- ----------------------------------------------------------------------------
-INSERT INTO students (student_id, user_id, student_code, name, dept_id, academic_year, section_id) VALUES
-(1, 10, '1012411001', 'Alice Vance', 1, 3, 1),
-(2, 11, '1012411002', 'Bob Smith', 1, 3, 1),
-(3, 12, '1012411003', 'Charlie Brown', 2, 2, 3);
-
--- ----------------------------------------------------------------------------
--- 6. Subjects
--- ----------------------------------------------------------------------------
-INSERT INTO subjects (subject_id, subject_code, subject_name, dept_id, type, lectures_per_week, duration_hours, required_room_type) VALUES
-(1, 'CS501', 'Database Management Systems', 1, 'Lecture', 3, 1, 'Classroom'),
-(2, 'CS501L', 'DBMS Laboratory', 1, 'Lab', 1, 2, 'Computer Lab'),
-(3, 'CS502', 'Computer Networks', 1, 'Lecture', 3, 1, 'Classroom'),
-(4, 'CS503', 'Operating Systems', 1, 'Lecture', 3, 1, 'Classroom'),
-(5, 'CS503L', 'OS Laboratory', 1, 'Lab', 1, 2, 'Computer Lab'),
-(6, 'EC301', 'Digital Signal Processing', 2, 'Lecture', 3, 1, 'Classroom'),
-(7, 'EC301L', 'DSP Laboratory', 2, 'Lab', 1, 2, 'Computer Lab'),
-(8, 'ME701', 'Finite Element Analysis', 3, 'Lecture', 3, 1, 'Classroom'),
-(9, 'ME701L', 'CAD/CAM Laboratory', 3, 'Lab', 1, 2, 'Computer Lab'),
-(10, 'CS504', 'Artificial Intelligence', 1, 'Lecture', 3, 1, 'Classroom');
-
--- ----------------------------------------------------------------------------
--- 7. Subject Requirements
--- ----------------------------------------------------------------------------
-INSERT INTO subject_requirements (requirement_id, subject_id, min_capacity, requires_projector, requires_smart_board, min_computers, special_equipment_needed) VALUES
-(1, 1, 50, TRUE, FALSE, 0, NULL),
-(2, 2, 30, TRUE, FALSE, 30, 'MySQL Server Workbench'),
-(3, 3, 50, TRUE, FALSE, 0, NULL),
-(4, 4, 50, FALSE, FALSE, 0, NULL),
-(5, 5, 30, TRUE, FALSE, 30, 'Linux OS Environment'),
-(6, 6, 40, TRUE, FALSE, 0, NULL),
-(7, 7, 25, TRUE, FALSE, 25, 'MATLAB Software Kits'),
-(8, 8, 35, TRUE, FALSE, 0, NULL),
-(9, 9, 30, TRUE, FALSE, 30, 'AutoCAD / ANSYS Workstations'),
-(10, 10, 50, TRUE, TRUE, 0, NULL);
-
--- ----------------------------------------------------------------------------
--- 8. Classrooms
--- ----------------------------------------------------------------------------
-INSERT INTO rooms (room_id, room_number, building, capacity, projector_available, smart_board_available, is_active) VALUES
-(1, 'CR-101', 'Main Academic Block', 60, TRUE, TRUE, TRUE),
-(2, 'CR-102', 'Main Academic Block', 60, TRUE, FALSE, TRUE),
-(3, 'CR-103', 'Main Academic Block', 45, TRUE, FALSE, TRUE),
-(4, 'CR-104', 'Main Academic Block', 40, FALSE, FALSE, TRUE),
-(5, 'CR-201', 'Science Block', 70, TRUE, TRUE, TRUE),
-(6, 'CR-202', 'Science Block', 35, FALSE, FALSE, TRUE);
-
--- ----------------------------------------------------------------------------
--- 9. Laboratories
--- ----------------------------------------------------------------------------
-INSERT INTO labs (lab_id, lab_name, building, capacity, computer_count, projector_available, specialized_equipment, is_active) VALUES
-(1, 'CompLab-1 (Database & OS)', 'Tech Block', 35, 35, TRUE, 'Linux/MySQL Installed', TRUE),
-(2, 'CompLab-2 (AI & Networks)', 'Tech Block', 35, 35, TRUE, 'GPU Workstations, Cisco Routers', TRUE),
-(3, 'CAD/CAM Lab', 'Engineering Block', 40, 40, TRUE, 'High Performance ANSYS Nodes', TRUE);
-
--- ----------------------------------------------------------------------------
--- 10. Equipment
--- ----------------------------------------------------------------------------
-INSERT INTO equipment (equipment_id, equipment_name, quantity, location_room_id, location_lab_id, status) VALUES
-(1, 'HD Ceiling Projector', 1, 1, NULL, 'Functional'),
-(2, 'Interactive Smart Board', 1, 1, NULL, 'Functional'),
-(3, 'Cisco Router Rack Unit', 2, NULL, 2, 'Functional'),
-(4, 'High Performance GPU Workstation', 10, NULL, 2, 'Functional'),
-(5, 'Digital Oscilloscope Unit', 15, NULL, 3, 'Functional');
-
--- ----------------------------------------------------------------------------
--- 11. Time Slots
--- ----------------------------------------------------------------------------
-INSERT INTO time_slots (slot_id, day_of_week, start_time, end_time, slot_order) VALUES
-(1, 'Monday', '09:00:00', '10:00:00', 1),
-(2, 'Monday', '10:00:00', '11:00:00', 2),
-(3, 'Monday', '11:00:00', '12:00:00', 3),
-(4, 'Monday', '12:00:00', '13:00:00', 4),
-(5, 'Monday', '14:00:00', '15:00:00', 5),
-(6, 'Monday', '15:00:00', '16:00:00', 6),
-(7, 'Tuesday', '09:00:00', '10:00:00', 1),
-(8, 'Tuesday', '10:00:00', '11:00:00', 2),
-(9, 'Tuesday', '11:00:00', '12:00:00', 3),
-(10, 'Tuesday', '12:00:00', '13:00:00', 4),
-(11, 'Tuesday', '14:00:00', '15:00:00', 5),
-(12, 'Tuesday', '15:00:00', '16:00:00', 6),
-(13, 'Wednesday', '09:00:00', '10:00:00', 1),
-(14, 'Wednesday', '10:00:00', '11:00:00', 2),
-(15, 'Wednesday', '11:00:00', '12:00:00', 3),
-(16, 'Wednesday', '12:00:00', '13:00:00', 4),
-(17, 'Wednesday', '14:00:00', '15:00:00', 5),
-(18, 'Wednesday', '15:00:00', '16:00:00', 6),
-(19, 'Thursday', '09:00:00', '10:00:00', 1),
-(20, 'Thursday', '10:00:00', '11:00:00', 2),
-(21, 'Thursday', '11:00:00', '12:00:00', 3),
-(22, 'Thursday', '12:00:00', '13:00:00', 4),
-(23, 'Thursday', '14:00:00', '15:00:00', 5),
-(24, 'Thursday', '15:00:00', '16:00:00', 6),
-(25, 'Friday', '09:00:00', '10:00:00', 1),
-(26, 'Friday', '10:00:00', '11:00:00', 2),
-(27, 'Friday', '11:00:00', '12:00:00', 3),
-(28, 'Friday', '12:00:00', '13:00:00', 4),
-(29, 'Friday', '14:00:00', '15:00:00', 5),
-(30, 'Friday', '15:00:00', '16:00:00', 6);
-
--- ----------------------------------------------------------------------------
--- 12. Faculty Availability
--- ----------------------------------------------------------------------------
-INSERT INTO faculty_availability (faculty_id, slot_id, is_available) VALUES
-(1, 1, FALSE),
-(1, 2, TRUE),
-(2, 1, TRUE),
-(2, 2, TRUE);
-
--- ----------------------------------------------------------------------------
--- 13. Course Assignments
--- ----------------------------------------------------------------------------
-INSERT INTO course_assignments (assignment_id, subject_id, faculty_id, section_id) VALUES
-(1, 1, 1, 1), -- CS501 (DBMS Lecture) -> Dr. Smith -> CSE-3A
-(2, 2, 1, 1), -- CS501L (DBMS Lab) -> Dr. Smith -> CSE-3A
-(3, 3, 2, 1), -- CS502 (CN Lecture) -> Prof. Johnson -> CSE-3A
-(4, 4, 3, 1), -- CS503 (OS Lecture) -> Dr. Williams -> CSE-3A
-(5, 5, 3, 1), -- CS503L (OS Lab) -> Dr. Williams -> CSE-3A
-(6, 6, 4, 3), -- EC301 (DSP Lecture) -> Prof. Brown -> ECE-2A
-(7, 7, 5, 3), -- EC301L (DSP Lab) -> Dr. Jones -> ECE-2A
-(8, 8, 6, 4), -- ME701 (FEA Lecture) -> Prof. Miller -> MECH-4A
-(9, 9, 7, 4), -- ME701L (CAD Lab) -> Dr. Davis -> MECH-4A
-(10, 10, 8, 2);-- CS504 (AI Lecture) -> Prof. Garcia -> CSE-3B
+INSERT INTO time_slots (day_of_week,start_time,end_time,slot_order) VALUES
+('Monday','08:30','09:30',1),('Monday','09:30','10:30',2),('Monday','10:30','11:30',3),('Monday','11:30','12:30',4),('Monday','12:30','13:30',5),('Monday','13:30','14:30',6),('Monday','14:30','15:30',7),('Monday','15:30','16:30',8),('Monday','16:30','17:30',9),
+('Tuesday','08:30','09:30',1),('Tuesday','09:30','10:30',2),('Tuesday','10:30','11:30',3),('Tuesday','11:30','12:30',4),('Tuesday','12:30','13:30',5),('Tuesday','13:30','14:30',6),('Tuesday','14:30','15:30',7),('Tuesday','15:30','16:30',8),('Tuesday','16:30','17:30',9),
+('Wednesday','08:30','09:30',1),('Wednesday','09:30','10:30',2),('Wednesday','10:30','11:30',3),('Wednesday','11:30','12:30',4),('Wednesday','12:30','13:30',5),('Wednesday','13:30','14:30',6),('Wednesday','14:30','15:30',7),('Wednesday','15:30','16:30',8),('Wednesday','16:30','17:30',9),
+('Thursday','08:30','09:30',1),('Thursday','09:30','10:30',2),('Thursday','10:30','11:30',3),('Thursday','11:30','12:30',4),('Thursday','12:30','13:30',5),('Thursday','13:30','14:30',6),('Thursday','14:30','15:30',7),('Thursday','15:30','16:30',8),('Thursday','16:30','17:30',9),
+('Friday','08:30','09:30',1),('Friday','09:30','10:30',2),('Friday','10:30','11:30',3),('Friday','11:30','12:30',4),('Friday','12:30','13:30',5),('Friday','13:30','14:30',6),('Friday','14:30','15:30',7),('Friday','15:30','16:30',8),('Friday','16:30','17:30',9);
+INSERT INTO faculty_availability (faculty_id,slot_id,is_available) VALUES (1,1,FALSE),(2,9,FALSE),(7,17,FALSE),(12,25,FALSE);
+INSERT INTO course_assignments (subject_id,faculty_id,section_id) VALUES
+(1,1,1),(2,1,1),(3,2,1),(4,3,2),(5,3,2),(6,4,2),(7,5,3),(8,5,3),(9,7,4),(10,7,4),(11,8,5),(12,9,5),(13,9,5),(14,10,4),(15,12,6),(16,12,6),(17,13,7),(18,14,7),(19,14,7),(20,15,6);

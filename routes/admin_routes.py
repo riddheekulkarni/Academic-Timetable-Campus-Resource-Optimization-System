@@ -78,7 +78,7 @@ def handle_students():
         sid = StudentModel.create(
             name=data.get("name"),
             email=data.get("email"),
-            password=data.get("password", "password123"),
+            password=data.get("password", "Password123"),
             student_code=data.get("student_code"),
             dept_id=data.get("dept_id"),
             academic_year=data.get("academic_year"),
@@ -133,7 +133,7 @@ def handle_faculty():
         fid = FacultyModel.create(
             name=data.get("name"),
             email=data.get("email"),
-            password=data.get("password", "password123"),
+            password=data.get("password", "Password123"),
             faculty_code=data.get("faculty_code"),
             dept_id=data.get("dept_id"),
             designation=data.get("designation", "Assistant Professor")

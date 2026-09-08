@@ -3,8 +3,7 @@ Timetable Generation Engine
 Combines Course Assignments, Time Slots, Faculty Availability, and Room Allocations.
 Features:
 - Universal Lunch Break (12:30 PM - 1:30 PM) preservation
-- Balanced utilization of all morning slots (8:30-9:30, 9:30-10:30, 10:30-11:30, 11:30-12:30)
-- Balanced afternoon slots (1:30-2:30, 2:30-3:30, 3:30-4:30)
+- Balanced utilization of all teaching slots from 8:30 AM through 5:30 PM
 - Realistic staggered starts per division (TY CSE A, TY CSE B, SY ECE A, Final Year MECH A)
 - Zero faculty and zero room clashes
 """
@@ -62,7 +61,8 @@ class TimetableGenerator:
         lab_assignments = [a for a in assignments if a["subject_type"] == "Lab"]
         lecture_assignments = [a for a in assignments if a["subject_type"] != "Lab"]
 
-        # 1. Schedule Labs in Dedicated Practical Blocks (e.g. 1:30-3:30 PM or 9:30-11:30 AM)
+        # 1. Schedule labs across morning and afternoon practical blocks.  The
+        # rotation prevents every lab from being pushed into the late afternoon.
         for assignment in lab_assignments:
             aid = assignment["assignment_id"]
             sec_id = assignment["section_id"]
@@ -71,8 +71,13 @@ class TimetableGenerator:
             if not suitable_resources:
                 continue
 
-            # Labs prefer afternoon blocks (orders 6, 7, 8) or morning (orders 2, 3)
-            preferred_lab_orders = [6, 7, 2, 3, 8]
+            lab_preference_sets = (
+                [2, 3, 6, 7, 8, 9, 4, 1],
+                [6, 7, 3, 2, 8, 9, 4, 1],
+                [3, 2, 8, 7, 6, 9, 4, 1],
+                [7, 8, 2, 3, 6, 9, 4, 1],
+            )
+            preferred_lab_orders = lab_preference_sets[(aid + sec_id) % len(lab_preference_sets)]
             placed = False
 
             day_rotation = days[(sec_id * 2) % len(days):] + days[:(sec_id * 2) % len(days)]
@@ -80,7 +85,10 @@ class TimetableGenerator:
             for day in day_rotation:
                 if placed:
                     break
-                day_slots = sorted(slots_by_day[day], key=lambda s: preferred_lab_orders.index(s["slot_order"]) if s["slot_order"] in preferred_lab_orders else 99)
+                day_slots = sorted(slots_by_day[day], key=lambda s: (
+                    slot_usage_count[s["slot_id"]],
+                    preferred_lab_orders.index(s["slot_order"]) if s["slot_order"] in preferred_lab_orders else 99,
+                ))
                 
                 for slot in day_slots:
                     slot_id = slot["slot_id"]
@@ -125,16 +133,12 @@ class TimetableGenerator:
             offset = (sec_id * 2 + (aid % 3)) % len(days)
             staggered_days = days[offset:] + days[:offset]
 
-            # Diverse slot preferences ensuring Slot 4 (11:30 - 12:30) is actively scheduled:
-            # Slot orders: 1 (8:30-9:30), 2 (9:30-10:30), 3 (10:30-11:30), 4 (11:30-12:30), 6 (1:30-2:30), 7 (2:30-3:30)
-            if (aid + sec_id) % 4 == 0:
-                slot_pref = [4, 1, 3, 2, 6, 7] # 11:30 first!
-            elif (aid + sec_id) % 4 == 1:
-                slot_pref = [2, 4, 1, 6, 3, 7] # 9:30 & 11:30
-            elif (aid + sec_id) % 4 == 2:
-                slot_pref = [3, 1, 4, 7, 2, 6] # 10:30 & 11:30
-            else:
-                slot_pref = [1, 4, 2, 3, 6, 7] # 8:30 & 11:30
+            # Rotate every lecture's preferred start across the entire teaching
+            # day.  This keeps 8:30 optional, makes 3:30-5:30 usable, and
+            # prevents a single section from always starting at the same time.
+            teaching_orders = [1, 2, 3, 4, 6, 7, 8, 9]
+            start_index = (aid * 2 + sec_id * 3) % len(teaching_orders)
+            slot_pref = teaching_orders[start_index:] + teaching_orders[:start_index]
 
             for day in staggered_days:
                 if allocated_count >= lectures_needed:
@@ -148,8 +152,8 @@ class TimetableGenerator:
                     continue
 
                 day_slots = sorted(slots_by_day[day], key=lambda s: (
+                    slot_usage_count[s["slot_id"]],
                     slot_pref.index(s["slot_order"]) if s["slot_order"] in slot_pref else 99,
-                    slot_usage_count[s["slot_id"]]
                 ))
 
                 for slot in day_slots:

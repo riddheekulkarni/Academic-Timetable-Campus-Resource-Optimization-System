@@ -164,11 +164,123 @@
   padding: 14px 0;
 }
 
+/* Faculty view: keep the complete week visible without turning the cards into
+   plain text. The denser rules are scoped to this one schedule page. */
+.faculty-schedule-page .main-content {
+  padding: 18px 22px;
+}
+
+.faculty-schedule-page .header-bar {
+  margin-bottom: 14px;
+}
+
+.faculty-schedule-page .header-title-group h1 {
+  font-size: 23px;
+}
+
+.faculty-schedule-page .header-title-group p {
+  font-size: 12.5px;
+}
+
+.faculty-schedule-page .timetable-grid th,
+.faculty-schedule-page .timetable-grid td {
+  padding: 4px 5px;
+}
+
+/* The faculty dashboard has a permanent sidebar, so its five-day matrix must
+   size to the remaining panel rather than retain the global 960px minimum. */
+.faculty-schedule-page .timetable-grid-wrapper {
+  overflow-x: hidden;
+}
+
+.faculty-schedule-page .timetable-grid {
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.faculty-schedule-page .timetable-grid th:first-child,
+.faculty-schedule-page .timetable-grid td.time-col {
+  width: 13.5%;
+}
+
+.faculty-schedule-page .timetable-grid th:not(:first-child),
+.faculty-schedule-page .timetable-grid td:not(.time-col):not(.lunch-break-cell) {
+  width: 17.3%;
+}
+
+/* The administrator's master view uses the same five-day matrix.  Auto table
+   sizing was allowing long course names to push Friday outside the panel. */
+.master-timetable-page .timetable-grid-wrapper {
+  overflow-x: hidden;
+}
+
+.master-timetable-page .timetable-grid {
+  min-width: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.master-timetable-page .timetable-grid th:first-child,
+.master-timetable-page .timetable-grid td.time-col {
+  width: 13.5%;
+}
+
+.master-timetable-page .timetable-grid th:not(:first-child),
+.master-timetable-page .timetable-grid td:not(.time-col):not(.lunch-break-cell) {
+  width: 17.3%;
+}
+
+.faculty-schedule-page .timetable-grid th {
+  padding: 6px 5px;
+  font-size: 11px;
+}
+
+.faculty-schedule-page .time-col {
+  width: 122px;
+  font-size: 10.5px;
+}
+
+.faculty-schedule-page .cell-card {
+  padding: 4px 6px;
+  margin-bottom: 3px;
+}
+
+.faculty-schedule-page .cell-code {
+  font-size: 10.5px;
+}
+
+.faculty-schedule-page .cell-loc {
+  font-size: 9.5px;
+}
+
+.faculty-schedule-page .cell-sub {
+  font-size: 10px;
+  margin-bottom: 1px;
+}
+
+.faculty-schedule-page .cell-prof {
+  font-size: 9px;
+}
+
+.faculty-schedule-page .empty-cell {
+  padding: 5px 0;
+  font-size: 11px;
+}
+
+.faculty-schedule-page .lunch-break-cell {
+  padding: 5px 6px !important;
+}
+
+.faculty-schedule-page .lunch-ribbon {
+  padding: 3px 11px;
+}
+
 /* ============================================================
    Complete Print & PDF Export Formatting (Includes All 5 Days)
    ============================================================ */
 @page {
-  size: landscape;
+  /* A3 preserves the complete weekly grid, including its cards, on one sheet. */
+  size: A3 landscape;
   margin: 8mm;
 }
 
@@ -219,6 +331,27 @@
     font-size: 10.5px !important;
     color: #475569 !important;
     margin: 0 !important;
+  }
+
+  /* A weekly grid is one report: do not split it between printed pages. */
+  #faculty-timetable-container,
+  .timetable-grid-wrapper,
+  .timetable-grid {
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+  }
+
+  .faculty-schedule-page .header-bar {
+    margin-bottom: 4px !important;
+    padding-bottom: 3px !important;
+  }
+
+  .faculty-schedule-page .header-title-group h1 {
+    font-size: 14px !important;
+  }
+
+  .faculty-schedule-page .header-title-group p {
+    display: none !important;
   }
 
   /* Table Grid: Strictly fit 100% of printable landscape page */
@@ -325,5 +458,31 @@
     padding: 2px 10px !important;
     background: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
+  }
+
+  /* The nine teaching rows and lunch row fit comfortably on one A4 landscape
+     sheet while retaining the existing borders, colours, and information. */
+  .faculty-schedule-page .timetable-grid th,
+  .faculty-schedule-page .timetable-grid td {
+    padding: 2px 3px !important;
+  }
+
+  .faculty-schedule-page .cell-card {
+    padding: 2px 3px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .faculty-schedule-page .cell-code { font-size: 8.5px !important; }
+  .faculty-schedule-page .cell-loc { font-size: 7.5px !important; }
+  .faculty-schedule-page .cell-sub { font-size: 8px !important; line-height: 1.1 !important; }
+  .faculty-schedule-page .cell-prof { font-size: 7.5px !important; }
+  .faculty-schedule-page .empty-cell { padding: 3px 0 !important; }
+  .faculty-schedule-page .lunch-break-cell { padding: 2px !important; }
+
+  /* Ignore the screen-only fitted transform when the browser enters print. */
+  .faculty-schedule-page .timetable-grid-wrapper.is-viewport-fitted {
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
   }
 }

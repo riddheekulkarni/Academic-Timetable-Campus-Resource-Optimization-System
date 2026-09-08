@@ -165,7 +165,7 @@ function openAddStudentModal() {
   document.getElementById("studentEmail").value = "";
   document.getElementById("studentCode").value = "";
   document.getElementById("studentPassword").value = "";
-  document.getElementById("studentPassword").placeholder = "Default: password123";
+  document.getElementById("studentPassword").placeholder = "Default: Password123";
   document.getElementById("studentYear").value = "3";
   openModal("studentModal");
 }
@@ -307,7 +307,7 @@ function openAddFacultyModal() {
   document.getElementById("facultyEmail").value = "";
   document.getElementById("facultyCode").value = "";
   document.getElementById("facultyPassword").value = "";
-  document.getElementById("facultyPassword").placeholder = "Default: password123";
+  document.getElementById("facultyPassword").placeholder = "Default: Password123";
   document.getElementById("facultyDesignation").value = "Assistant Professor";
   openModal("facultyModal");
 }
