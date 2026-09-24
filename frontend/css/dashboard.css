@@ -11,6 +11,8 @@
 /* Sidebar Navigation */
 .sidebar {
   width: 270px;
+  height: 100vh;
+  box-sizing: border-box;
   background: var(--bg-sidebar);
   color: #f8fafc;
   padding: 24px 18px;
@@ -117,6 +119,9 @@
   flex-direction: column;
   gap: 5px;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .nav-category {
@@ -171,6 +176,10 @@
 }
 
 .sidebar-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background: var(--bg-sidebar);
   border-top: 1px solid var(--border-dark);
   padding-top: 16px;
   margin-top: auto;
