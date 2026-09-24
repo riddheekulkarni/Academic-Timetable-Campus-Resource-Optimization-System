@@ -35,6 +35,16 @@ def create_app():
         status_code = 200 if ok else 500
         return jsonify({"success": ok, "message": message}), status_code
 
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        from mysql.connector import Error as MySQLError
+        if isinstance(e, MySQLError) or "mysql" in str(e).lower() or "connection" in str(e).lower():
+            return jsonify({
+                "success": False,
+                "message": "Database Connection Error: Could not connect to MySQL server. Please start MySQL service (MYSQL80)."
+            }), 500
+        return jsonify({"success": False, "message": f"Server Error: {str(e)}"}), 500
+
     @app.route("/")
     def serve_index():
         return send_from_directory(FRONTEND_DIR, "index.html")

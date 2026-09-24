@@ -54,7 +54,7 @@ const api = (() => {
     try {
       data = await response.json();
     } catch (err) {
-      data = { success: false, message: "Invalid server response." };
+      data = { success: false, message: `Server HTTP ${response.status} (${response.statusText}): Database or backend service error.` };
     }
 
     if (!response.ok && data.success === undefined) {
