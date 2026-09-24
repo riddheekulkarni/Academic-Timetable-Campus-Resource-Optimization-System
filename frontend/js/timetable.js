@@ -173,7 +173,7 @@ function renderFilteredTimetableGrid(containerId, schedule) {
   html += `</tbody></table></div>`;
   container.innerHTML = html;
 
-  fitFacultyTimetableToViewport(container);
+  fitScheduleTimetableToViewport(container);
 }
 
 /**
@@ -181,8 +181,10 @@ function renderFilteredTimetableGrid(containerId, schedule) {
  * Scaling the completed grid retains the card borders, colours, and layout;
  * it avoids rewriting cells into a less useful condensed view.
  */
-function fitFacultyTimetableToViewport(container) {
-  if (!document.body.classList.contains("faculty-schedule-page")) return;
+function fitScheduleTimetableToViewport(container) {
+  const isSchedulePage = document.body.classList.contains("faculty-schedule-page") ||
+    document.body.classList.contains("student-schedule-page");
+  if (!isSchedulePage) return;
 
   const wrapper = container.querySelector(".timetable-grid-wrapper");
   if (!wrapper) return;
@@ -209,7 +211,9 @@ function fitFacultyTimetableToViewport(container) {
 
 window.addEventListener("resize", () => {
   const container = document.getElementById("faculty-timetable-container");
-  if (container) fitFacultyTimetableToViewport(container);
+  if (container) fitScheduleTimetableToViewport(container);
+  const studentContainer = document.getElementById("student-timetable-container");
+  if (studentContainer) fitScheduleTimetableToViewport(studentContainer);
 });
 
 /**

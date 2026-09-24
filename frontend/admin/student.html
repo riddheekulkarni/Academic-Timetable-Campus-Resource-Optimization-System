@@ -89,7 +89,7 @@
           <span class="search-icon-inside">
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </span>
-          <input type="text" id="studentSearch" class="search-input" placeholder="Search by name, roll number, or email..." oninput="filterStudents()">
+          <input type="text" id="studentSearch" class="search-input" placeholder="Search by name, PRN, or email..." oninput="filterStudents()">
         </div>
         <div class="filter-group">
           <select id="studentDeptFilter" class="filter-select" onchange="filterStudents()">
@@ -109,7 +109,7 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Roll Number</th>
+              <th>PRN</th>
               <th>Full Name</th>
               <th>Email Address</th>
               <th>Department</th>
@@ -143,8 +143,8 @@
               <input type="text" id="studentName" required placeholder="e.g. Riddhee Kulkarni">
             </div>
             <div class="form-group">
-              <label for="studentCode">Roll Number</label>
-              <input type="text" id="studentCode" required placeholder="e.g. 1012411011">
+              <label for="studentCode">PRN</label>
+              <input type="text" id="studentCode" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" placeholder="e.g. 1012411001">
             </div>
           </div>
 

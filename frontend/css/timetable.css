@@ -166,35 +166,44 @@
 
 /* Faculty view: keep the complete week visible without turning the cards into
    plain text. The denser rules are scoped to this one schedule page. */
-.faculty-schedule-page .main-content {
+.faculty-schedule-page .main-content,
+.student-schedule-page .main-content {
   padding: 18px 22px;
 }
 
-.faculty-schedule-page .header-bar {
+.faculty-schedule-page .header-bar,
+.student-schedule-page .header-bar {
   margin-bottom: 14px;
 }
 
-.faculty-schedule-page .header-title-group h1 {
+.faculty-schedule-page .header-title-group h1,
+.student-schedule-page .header-title-group h1 {
   font-size: 23px;
 }
 
-.faculty-schedule-page .header-title-group p {
+.faculty-schedule-page .header-title-group p,
+.student-schedule-page .header-title-group p {
   font-size: 12.5px;
 }
 
 .faculty-schedule-page .timetable-grid th,
-.faculty-schedule-page .timetable-grid td {
+.faculty-schedule-page .timetable-grid td,
+.student-schedule-page .timetable-grid th,
+.student-schedule-page .timetable-grid td {
   padding: 4px 5px;
 }
 
 /* The faculty dashboard has a permanent sidebar, so its five-day matrix must
    size to the remaining panel rather than retain the global 960px minimum. */
-.faculty-schedule-page .timetable-grid-wrapper {
+.faculty-schedule-page .timetable-grid-wrapper,
+.student-schedule-page .timetable-grid-wrapper {
   overflow-x: hidden;
 }
 
-.faculty-schedule-page .timetable-grid {
+.faculty-schedule-page .timetable-grid,
+.student-schedule-page .timetable-grid {
   min-width: 0;
+  width: 100%;
   table-layout: fixed;
 }
 
@@ -203,8 +212,18 @@
   width: 13.5%;
 }
 
+.student-schedule-page .timetable-grid th:first-child,
+.student-schedule-page .timetable-grid td.time-col {
+  width: 13.5%;
+}
+
 .faculty-schedule-page .timetable-grid th:not(:first-child),
 .faculty-schedule-page .timetable-grid td:not(.time-col):not(.lunch-break-cell) {
+  width: 17.3%;
+}
+
+.student-schedule-page .timetable-grid th:not(:first-child),
+.student-schedule-page .timetable-grid td:not(.time-col):not(.lunch-break-cell) {
   width: 17.3%;
 }
 
@@ -230,30 +249,36 @@
   width: 17.3%;
 }
 
-.faculty-schedule-page .timetable-grid th {
+.faculty-schedule-page .timetable-grid th,
+.student-schedule-page .timetable-grid th {
   padding: 6px 5px;
   font-size: 11px;
 }
 
-.faculty-schedule-page .time-col {
+.faculty-schedule-page .time-col,
+.student-schedule-page .time-col {
   width: 122px;
   font-size: 10.5px;
 }
 
-.faculty-schedule-page .cell-card {
+.faculty-schedule-page .cell-card,
+.student-schedule-page .cell-card {
   padding: 4px 6px;
   margin-bottom: 3px;
 }
 
-.faculty-schedule-page .cell-code {
+.faculty-schedule-page .cell-code,
+.student-schedule-page .cell-code {
   font-size: 10.5px;
 }
 
-.faculty-schedule-page .cell-loc {
+.faculty-schedule-page .cell-loc,
+.student-schedule-page .cell-loc {
   font-size: 9.5px;
 }
 
-.faculty-schedule-page .cell-sub {
+.faculty-schedule-page .cell-sub,
+.student-schedule-page .cell-sub {
   font-size: 10px;
   margin-bottom: 1px;
 }

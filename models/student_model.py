@@ -36,6 +36,8 @@ class StudentModel:
 
     @staticmethod
     def create(name, email, password, student_code, dept_id, academic_year, section_id=None):
+        if not student_code or not student_code.isdigit() or len(student_code) != 10:
+            raise ValueError("PRN must be exactly 10 digits.")
         hashed = hash_password(password or "password123")
         with get_cursor(commit=True) as (conn, cursor):
             cursor.execute(
@@ -51,6 +53,8 @@ class StudentModel:
 
     @staticmethod
     def update(student_id, name, email, student_code, dept_id, academic_year, section_id=None, password=None):
+        if not student_code or not student_code.isdigit() or len(student_code) != 10:
+            raise ValueError("PRN must be exactly 10 digits.")
         with get_cursor(commit=True) as (conn, cursor):
             cursor.execute("SELECT user_id FROM students WHERE student_id = %s", (student_id,))
             row = cursor.fetchone()
