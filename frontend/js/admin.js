@@ -311,6 +311,7 @@ function renderFacultyTable(faculty) {
         <td><span class="badge badge-info">${f.designation}</span></td>
         <td>
           <div class="action-buttons">
+            <button class="btn-sm btn-secondary" onclick="openFacultyAvailability(${f.faculty_id}, '${f.name.replace(/'/g, "\\'")}')">Availability</button>
             <button class="btn-sm btn-edit" onclick="openEditFacultyModal(${f.faculty_id})">Edit</button>
             <button class="btn-sm btn-danger-sm" onclick="deleteFaculty(${f.faculty_id}, '${f.name}')">Delete</button>
           </div>
@@ -318,6 +319,35 @@ function renderFacultyTable(faculty) {
       </tr>
     `;
   });
+}
+
+async function openFacultyAvailability(facultyId, facultyName) {
+  document.getElementById("availabilityModalTitle").textContent = `${facultyName} - Availability`;
+  document.getElementById("faculty-availability-grid").innerHTML = '<div class="status-card">Loading availability...</div>';
+  openModal("availabilityModal");
+
+  const response = await api.get(`/api/faculty/${facultyId}/availability`);
+  if (!response.success) {
+    document.getElementById("faculty-availability-grid").innerHTML = `<div class="status-card">${response.message || "Unable to load availability."}</div>`;
+    return;
+  }
+
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const slotsByDay = Object.fromEntries(days.map(day => [day, []]));
+  (response.slots || []).forEach(slot => slotsByDay[slot.day_of_week].push(slot));
+  document.getElementById("faculty-availability-grid").innerHTML = days.map(day => `
+    <section class="availability-day">
+      <h3>${day}</h3>
+      <div class="availability-slots">
+        ${(slotsByDay[day] || []).map(slot => `
+          <div class="availability-slot ${slot.is_available ? "" : "unavailable"}">
+            <span>${String(slot.start_time).slice(0, 5)} - ${String(slot.end_time).slice(0, 5)}</span>
+            <strong>${slot.is_available ? "Available" : "Unavailable"}</strong>
+          </div>
+        `).join("")}
+      </div>
+    </section>
+  `).join("");
 }
 
 function filterFaculty() {
