@@ -12,6 +12,9 @@
 .sidebar {
   width: 270px;
   height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
   box-sizing: border-box;
   background: var(--bg-sidebar);
   color: #f8fafc;
@@ -176,9 +179,6 @@
 }
 
 .sidebar-footer {
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
   background: var(--bg-sidebar);
   border-top: 1px solid var(--border-dark);
   padding-top: 16px;
