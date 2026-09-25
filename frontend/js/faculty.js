@@ -17,7 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
 const availabilityDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 function formatAvailabilityTime(value) {
-  return String(value || "").slice(0, 5);
+  const [hours, minutes] = String(value || "").slice(0, 5).split(":").map(Number);
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) return "";
+  const period = hours >= 12 ? "PM" : "AM";
+  const displayHours = hours % 12 || 12;
+  return `${displayHours}:${String(minutes).padStart(2, "0")} ${period}`;
 }
 
 async function loadAvailability() {

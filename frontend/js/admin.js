@@ -335,14 +335,19 @@ async function openFacultyAvailability(facultyId, facultyName) {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   const slotsByDay = Object.fromEntries(days.map(day => [day, []]));
   (response.slots || []).forEach(slot => slotsByDay[slot.day_of_week].push(slot));
+  const formatTime = value => {
+    const [hours, minutes] = String(value || "").slice(0, 5).split(":").map(Number);
+    if (Number.isNaN(hours) || Number.isNaN(minutes)) return "";
+    const period = hours >= 12 ? "PM" : "AM";
+    return `${hours % 12 || 12}:${String(minutes).padStart(2, "0")} ${period}`;
+  };
   document.getElementById("faculty-availability-grid").innerHTML = days.map(day => `
     <section class="availability-day">
       <h3>${day}</h3>
       <div class="availability-slots">
         ${(slotsByDay[day] || []).map(slot => `
           <div class="availability-slot ${slot.is_available ? "" : "unavailable"}">
-            <span>${String(slot.start_time).slice(0, 5)} - ${String(slot.end_time).slice(0, 5)}</span>
-            <strong>${slot.is_available ? "Available" : "Unavailable"}</strong>
+            <span>${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}</span>
           </div>
         `).join("")}
       </div>
